@@ -11,9 +11,9 @@ import {
 import { TodoService } from './todo.service';
 import { CreateAndUpdateTodo } from './create-and-update.dto';
 
-let id = 0;
+let id = 1;
 
-@Controller('todo')
+@Controller('todos')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
@@ -36,12 +36,12 @@ export class TodoController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateTodoDto: CreateAndUpdateTodo) {
-    return this.todoService.update(id, updateTodoDto);
+  update(@Param('id') id: string, @Body() updateTodoDto: CreateAndUpdateTodo) {
+    return this.todoService.update(+id, updateTodoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.todoService.remove(id);
+  remove(@Param('id') id: string) {
+    return this.todoService.remove(+id);
   }
 }

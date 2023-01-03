@@ -9,7 +9,18 @@ export interface Todo {
 
 @Injectable()
 export class TodoService {
-  private todos: Todo[] = [];
+  private todos: Todo[] = [
+    {
+      id: 0,
+      todo: 'Clean the kitchen',
+      done: false,
+    },
+    {
+      id: 1,
+      todo: 'Bring out the trash',
+      done: false,
+    },
+  ];
 
   create(createTodoDto: Todo): Todo {
     this.todos.push(createTodoDto);
@@ -24,15 +35,16 @@ export class TodoService {
     return this.todos.find((todo) => todo.id === id);
   }
 
-  update(id: number, updateTodoDto: CreateAndUpdateTodo) {
-    const index = this.todos.findIndex((todo) => todo.id === id);
-
-    if (!index) {
-      console.warn(`No TODO with id ${id} found, nothing to update`);
-      return updateTodoDto;
-    }
-    this.todos[index] = { id, ...updateTodoDto };
-    return updateTodoDto;
+  update(id: number, updatedTodo: CreateAndUpdateTodo) {
+    this.todos = this.todos.map((t) =>
+      t.id === id
+        ? {
+            ...updatedTodo,
+            id,
+          }
+        : t,
+    );
+    return updatedTodo;
   }
 
   remove(id: number): Todo {

@@ -2,23 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface Todo {
-  id: number;
-  todo: string;
-  done: boolean;
-}
-
-export interface CreateAndUpdateTodo {
-  todo: string;
-  done: boolean;
-}
+import {CreateAndUpdateTodo, Todo} from "./+state/todo.model";
 
 const ENDPOINT = 'http://localhost:3000/todos';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TodosService {
+export class TodoService {
   constructor(private http: HttpClient) {}
 
   public getAllTodos(): Observable<Todo[]> {
@@ -30,13 +21,13 @@ export class TodosService {
   }
 
   public updateTodo(todo: Todo): Observable<Todo> {
-    return this.http.put<Todo>(`${ENDPOINT}?id=${todo.id}`, {
+    return this.http.patch<Todo>(`${ENDPOINT}/${todo.id}`, {
       todo: todo.todo,
       done: todo.done,
     });
   }
 
   public deleteTodo(id: number): Observable<Todo> {
-    return this.http.delete<Todo>(`${ENDPOINT}?id=${id}`);
+    return this.http.delete<Todo>(`${ENDPOINT}/${id}`);
   }
 }
